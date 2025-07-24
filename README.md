@@ -2,8 +2,6 @@
 
 *A secure, open-source password manager built with Flutter, featuring biometric auth, AES encryption, and zero cloud dependency.*
 
-![Demo GIF](https://github.com/cxuri/pascii/blob/main/assets/demo.gif)
-*(Replace with actual GIF/screenshot)*
 
 [![GitHub Stars](https://img.shields.io/github/stars/cxuri/pascii?style=for-the-badge)](https://github.com/cxuri/pascii/stargazers)
 [![License](https://img.shields.io/github/license/cxuri/pascii?style=for-the-badge)](LICENSE)
@@ -57,8 +55,6 @@
 ---
 
 ## 📱 Usage
-1. On first launch, you'll be prompted to set a master password.
-2. Enable biometric authentication (optional but recommended).
 3. Start storing your:
    - Passwords
    - Notes
