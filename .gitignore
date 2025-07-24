@@ -1,0 +1,141 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# ===============================================
+# Flutter & Dart Generated Files
+# ===============================================
+**/android/app/google-services.json  # Firebase config (if used)
+**/ios/firebase_app_id_file.json    # Firebase iOS config (if used)
+**/ios/Runner/GoogleService-Info.plist
+
+# Build directories
+**/build/
+**/android/app/build/
+**/ios/build/
+**/web/build/
+**/linux/build/
+**/windows/build/
+**/macos/build/
+
+# Flutter-generated files
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+pubspec.lock  # Remove if you want to allow version flexibility in open source
+
+# Local development files
+*.lock
+*.log
+*.swp
+*.swo
+
+# ===============================================
+# Sensitive Signing Files (MUST BE IGNORED)
+# ===============================================
+# Android Signing
+android/key.properties  # Contains keystore passwords
+android/app/*.keystore
+android/app/*.jks
+android/app/debug.keystore
+
+# iOS Signing (if applicable)
+ios/Runner.xcworkspace/xcuserdata/
+ios/Runner.xcodeproj/xcuserdata/
+
+# ===============================================
+# IDE & OS Specific Files
+# ===============================================
+# Android Studio / IntelliJ
+.idea/
+*.iml
+*.iws
+
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# ===============================================
+# Environment & Configuration (Sensitive)
+# ===============================================
+.env
+.env.*
+*.env
+config.json
+secrets/
+
+# ===============================================
+# Firebase (if used)
+# ===============================================
+firebase_options.dart  # Generated file may contain keys
+**/google-services.json
+**/GoogleService-Info.plist
+
+# ===============================================
+# Miscellaneous
+# ===============================================
+# Coverage reports
+coverage/
+
+# Temporary files
+temp/
+tmp/
+
+# Personal notes/scratch files
+notes.md
+todo.txt
+scratch/

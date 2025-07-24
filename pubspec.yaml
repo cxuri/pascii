@@ -1,0 +1,148 @@
+name: pascii
+description: "Password manager"
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  hive: ^2.2.3
+  local_auth: ^2.3.0
+  google_fonts: ^6.2.1
+  encrypt: ^5.0.3
+  fluttertoast: ^8.2.12
+  shared_preferences: ^2.5.3
+  hive_flutter: ^1.1.0
+  uuid: ^4.5.1
+  share_plus: ^11.0.0
+  url_launcher: ^6.3.2
+  package_info_plus: ^8.3.0
+  provider: ^6.1.5
+  flutter_secure_storage: ^9.2.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    # Misc
+    - assets/avatar.png
+    - assets/lock.png
+    - assets/note.png
+    - assets/paper.png
+    - assets/warning.png
+
+    # Social media icons
+    - assets/facebook.png
+    - assets/twitter.png
+    - assets/twitter x.png
+    - assets/linkedin.png
+    - assets/instagram.png
+    - assets/reddit.png
+    - assets/tiktok.png
+    - assets/youtube.png
+    - assets/whatsapp.png
+    - assets/telegram.png
+    - assets/discord.png
+    - assets/slack.png
+    - assets/skype.png
+    - assets/snapchat.png
+    - assets/vk.png
+    - assets/pinterest.png
+    - assets/github.png
+    - assets/gitlab.png
+    - assets/bitbucket.png
+    - assets/quora.png
+
+    # Tech/development tools
+    - assets/figma.png
+    - assets/sketch.png
+    - assets/postman.png
+    - assets/jira.png
+    - assets/asana.png
+    - assets/trello.png
+    - assets/basecamp.png
+    - assets/jenkins.png
+    - assets/docker.png
+    - assets/mongodb.png
+    - assets/mysql.png
+    - assets/postgresql.png
+    - assets/mariadb.png
+    - assets/openwrt.png
+
+    # Operating systems
+    - assets/android.png
+    - assets/ubuntu.png
+    - assets/debian.png
+    - assets/zorin os.png
+    - assets/pop!_os.png
+    - assets/archlinux.png
+    - assets/manjaro.png
+    - assets/fedora.png
+    - assets/centos.png
+    - assets/freebsd.png
+    - assets/openbsd.png
+    - assets/raspberry pi.png
+    - assets/windows 10.png
+    - assets/windows 11.png
+    - assets/oracle virtualbox.png
+
+    # Streaming services
+    - assets/netflix.png
+    - assets/disney+.png
+    - assets/hbo max.png
+    - assets/hulu.png
+    - assets/amazon prime video.png
+    - assets/paramount.png
+    - assets/pluto tv.png
+    - assets/tubi.png
+    - assets/discovery+.png
+    - assets/plex.svg
+
+    # Other services
+    - assets/google.png
+    - assets/google drive.png
+    - assets/microsoft.png
+    - assets/microsoft outlook.png
+    - assets/microsoft onedrive.png
+    - assets/dropbox.png
+    - assets/zoom.png
+    - assets/spotify.png
+    - assets/soundcloud.png
+    - assets/deezer.png
+    - assets/evernote.png
+    - assets/hootsuite.png
+    - assets/canva.png
+    - assets/ebay.png
+    - assets/walmart.png
+    - assets/aliexpress.png
+    - assets/newegg.png
+    - assets/paypal.png
+    - assets/venmo.png
+    - assets/coinbase.png
+    - assets/bitgo.png
+    - assets/metamask.png
+    - assets/trust.png
+    - assets/steam.png
+    - assets/ea.png
+    - assets/ubisoft.png
+    - assets/epic.png
+    - assets/pandora.png
+    - assets/apple.png
+    - assets/cloudflare.png
+    - assets/60111.jpg
+    - assets/riot.svg
+    - assets/sbte.png
+    - assets/pascii.png
+
+    - assets/ic_launcher.jpeg
