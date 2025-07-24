@@ -3,7 +3,7 @@
 *A secure, open-source password manager built with Flutter, featuring biometric authentication, AES encryption, and 100% offline storage.*
 
 <p align="center">
-  <img src="assets/screenshots/homescreen.jpeg" width="400" alt="Pascii Home Screen" />
+  <img src="screenshots/homescreen.jpeg" width="400" alt="Pascii Home Screen" />
 </p>
 
 <p align="center">
@@ -41,13 +41,13 @@
 
 | Home Screen | Create Password | View Password |
 |-------------|------------------|----------------|
-| <img src="assets/screenshots/homescreen.jpeg" width="250" alt="Home screen" /> | <img src="assets/screenshots/create password.jpeg" width="250" alt="Create password" /> | <img src="assets/screenshots/password view.png" width="250" alt="View password" /> |
+| <img src="creenshots/homescreen.jpeg" width="250" alt="Home screen" /> | <img src="screenshots/create password.jpeg" width="250" alt="Create password" /> | <img src="screenshots/password view.png" width="250" alt="View password" /> |
 
 ### 🗒️ Notes UI
 
 | Create/View Note | Stored Notes |
 |------------------|--------------|
-| <img src="assets/screenshots/create and view note.jpeg" width="250" alt="Create and view note" /> | <img src="assets/screenshots/stored notes.jpeg" width="250" alt="Stored notes" /> |
+| <img src="screenshots/create and view note.jpeg" width="250" alt="Create and view note" /> | <img src="screenshots/stored notes.jpeg" width="250" alt="Stored notes" /> |
 
 ---
 
