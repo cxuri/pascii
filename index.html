@@ -84,6 +84,24 @@
         .screenshot:hover {
             transform: scale(1.03);
         }
+
+        /* Constrain all images */
+        img {
+          max-width: 100%;
+          height: auto;
+        }
+        
+        /* Specific screenshots sizing */
+        .screenshot {
+          width: 300px;  /* Fixed width */
+          height: auto;  /* Maintain aspect ratio */
+        }
+        
+        /* For carousel images */
+        .carousel-inner img {
+          max-height: 500px;
+          object-fit: contain;
+        }
         
         .banner {
             background-color: var(--bs-banner);
