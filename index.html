@@ -14,7 +14,7 @@
             --bs-secondary: #1E1E1E;
             --bs-bg: #0A0A0A;
             --bs-card: #1E1E1E;
-            --bs-text: #FFFFFF;  /* Pure white for best contrast */
+            --bs-text: #FFFFFF;
             --bs-text-muted: #AAAAAA;
             --bs-accent: #BB86FC;
             --bs-banner: #3700B3;
@@ -35,15 +35,12 @@
             background-color: var(--bs-secondary) !important;
         }
         
-        .bg-dark {
-            background-color: var(--bs-bg) !important;
-        }
-        
         .card {
             background-color: var(--bs-card);
             border: none;
             border-radius: 12px;
             color: var(--bs-text);
+            margin-bottom: 1.5rem;
         }
         
         .text-muted {
@@ -76,89 +73,60 @@
             border-radius: 16px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.3);
             border: 1px solid var(--bs-secondary);
-            transition: transform 0.3s ease;
             max-width: 100%;
             height: auto;
         }
         
-        .screenshot:hover {
-            transform: scale(1.03);
-        }
-
-        /* Constrain all images */
-        img {
-          max-width: 100%;
-          height: auto;
+        /* Improved spacing for mobile */
+        .container {
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
         }
         
-        /* Specific screenshots sizing */
-        .screenshot {
-          width: 300px;  /* Fixed width */
-          height: auto;  /* Maintain aspect ratio */
+        .card {
+            margin: 0.5rem;
+            padding: 1.5rem;
         }
         
-        /* For carousel images */
+        section {
+            padding: 3rem 0;
+        }
+        
+        /* Carousel adjustments */
         .carousel-inner img {
-          max-height: 500px;
-          object-fit: contain;
+            max-height: 500px;
+            object-fit: contain;
+            padding: 0 1rem;
         }
         
-        .banner {
-            background-color: var(--bs-banner);
-            border-left: 4px solid var(--bs-accent);
-            color: white;
-        }
-        
-        .tech-badge {
-            background-color: var(--bs-secondary);
-            color: var(--bs-accent);
-            border-radius: 20px;
-            padding: 5px 15px;
-            margin: 5px;
-            display: inline-block;
-            font-size: 0.9rem;
+        .carousel-control-prev, .carousel-control-next {
+            width: 8%;
         }
         
         .app-icon {
             width: 100px;
             height: 100px;
             border-radius: 24px;
-            margin: 0 auto 20px;
+            margin: 0 auto 2rem;
             display: block;
         }
         
-        /* Improved contrast for text */
-        h1, h2, h3, h4, h5, h6 {
-            color: white !important;
-        }
-        
-        .navbar-brand, .nav-link {
-            color: white !important;
-        }
-        
-        .nav-link:hover {
-            color: var(--bs-accent) !important;
-        }
-        
-        .btn-outline-light {
-            color: white;
-            border-color: white;
-        }
-        
-        .btn-outline-light:hover {
-            background-color: rgba(255,255,255,0.1);
-            color: white;
-        }
-        
-        /* Screenshot carousel */
-        .carousel-indicators button {
-            background-color: var(--bs-accent);
-        }
-        
-        /* Responsive adjustments */
+        /* Responsive typography */
         @media (max-width: 768px) {
             .display-4 {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            .lead {
+                font-size: 1.1rem;
+            }
+            
+            section {
+                padding: 2rem 0;
             }
         }
     </style>
@@ -191,23 +159,20 @@
 
     <!-- Hero Section -->
     <header class="bg-primary py-5">
-        <div class="container py-5">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
+        <div class="container py-4">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
                     <img src="pages/logo.jpeg" alt="PASII Logo" class="app-icon">
                     <h1 class="display-4 fw-bold mb-3">PASII Password Manager</h1>
                     <p class="lead mb-4">An open-source, offline-first password manager for Android with military-grade security</p>
-                    <div class="d-flex flex-wrap">
-                        <a href="#download" class="btn btn-accent btn-lg me-3 mb-3">
+                    <div class="d-flex flex-wrap justify-content-center">
+                        <a href="#download" class="btn btn-accent btn-lg mx-2 mb-2">
                             <i class="bi bi-download"></i> Download APK
                         </a>
-                        <a href="https://github.com/cxuri/pascii" class="btn btn-outline-light btn-lg mb-3">
+                        <a href="https://github.com/cxuri/pascii" class="btn btn-outline-light btn-lg mx-2 mb-2">
                             <i class="bi bi-github"></i> View Source
                         </a>
                     </div>
-                </div>
-                <div class="col-lg-6 d-none d-lg-block">
-                    <img src="screenshots/homescreen.jpeg" alt="PASII App Preview" class="img-fluid screenshot">
                 </div>
             </div>
         </div>
@@ -350,7 +315,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-8">
-                    <div class="card p-5 text-center">
+                    <div class="card p-4 text-center">
                         <i class="bi bi-download feature-icon text-accent"></i>
                         <h2 class="fw-bold mb-3">Download PASII</h2>
                         <p class="lead mb-4">Current version: 1.0.0</p>
@@ -366,10 +331,10 @@
                         
                         <div class="mt-4">
                             <h5>Installation Instructions</h5>
-                            <ol class="text-start">
-                                <li>Download the APK file</li>
-                                <li>Open the downloaded file</li>
-                                <li>Allow "Install unknown apps" if prompted</li>
+                            <ol class="text-start ps-4">
+                                <li class="mb-2">Download the APK file</li>
+                                <li class="mb-2">Open the downloaded file</li>
+                                <li class="mb-2">Allow "Install unknown apps" if prompted</li>
                                 <li>Follow the installation instructions</li>
                             </ol>
                         </div>
@@ -395,7 +360,6 @@
                     <h5>Links</h5>
                     <ul class="list-unstyled">
                         <li class="mb-2"><a href="#features" class="text-white text-decoration-none">Features</a></li>
-                        <li class="mb-2"><a href="#security" class="text-white text-decoration-none">Security</a></li>
                         <li class="mb-2"><a href="#screenshots" class="text-white text-decoration-none">Screenshots</a></li>
                         <li class="mb-2"><a href="#download" class="text-white text-decoration-none">Download</a></li>
                     </ul>
