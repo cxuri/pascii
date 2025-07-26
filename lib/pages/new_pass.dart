@@ -48,10 +48,8 @@ class _NewPassState extends State<NewPass> {
       setState(() => _isLoading = true);
       try {
         final data = await _storage.getPassword(widget.id!);
-
         if (data != null) {
           _usernameController.text = data['username'] ?? '';
-
           if (data['password'] != null) {
             try {
               final decrypted = await _storage.decryptPassword(data['password']);
@@ -61,10 +59,7 @@ class _NewPassState extends State<NewPass> {
               _passwordController.text = '';
               await _showErrorDialog('Failed to decrypt password');
             }
-          } else {
-            _passwordController.text = '';
           }
-
           _selectedCategory = data['category'] ?? categories.first;
           _selectedSocialMedia = data['type'];
           _isSocialMediaSelected = _selectedSocialMedia != null;
@@ -94,13 +89,8 @@ class _NewPassState extends State<NewPass> {
     final username = _usernameController.text.trim();
     final password = _passwordController.text.trim();
 
-    if (username.isEmpty ||
-        password.isEmpty ||
-        _selectedSocialMedia == null ||
-        _selectedCategory == null) {
-      await _showErrorDialog(
-        'Please fill out all fields and select both an app and category.',
-      );
+    if (username.isEmpty || password.isEmpty || _selectedSocialMedia == null || _selectedCategory == null) {
+      await _showErrorDialog('Please fill out all fields and select both an app and category.');
       return;
     }
 
@@ -138,10 +128,7 @@ class _NewPassState extends State<NewPass> {
   }
 
   Future<void> _showErrorDialog(String message) async {
-    final theme = Provider.of<ThemeNotifier>(
-      context,
-      listen: false,
-    ).currentTheme;
+    final theme = Provider.of<ThemeNotifier>(context, listen: false).currentTheme;
 
     return showDialog(
       context: context,
@@ -213,7 +200,7 @@ class _NewPassState extends State<NewPass> {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          widget.id != null ? 'Edit Password' : 'Add Password',
+          widget.id != null ? 'Edit Password' : 'Create New Password',
           style: GoogleFonts.inter(
             fontSize: 18,
             fontWeight: FontWeight.w600,
@@ -231,65 +218,135 @@ class _NewPassState extends State<NewPass> {
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: SingleChildScrollView(
-                physics: const ClampingScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 8),
-                    _buildSectionLabel("Application"),
-                    const SizedBox(height: 8),
-                    _buildAppSelector(theme),
+          : SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (widget.id == null) ...[
+                    _buildWelcomeHeader(theme),
                     const SizedBox(height: 24),
-                    _buildSectionLabel("Username"),
-                    const SizedBox(height: 8),
-                    _buildUsernameField(theme),
-                    const SizedBox(height: 24),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _buildSectionLabel("Password"),
-                        _buildGenerateButton(theme),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    _buildPasswordField(theme),
-                    const SizedBox(height: 24),
-                    _buildSectionLabel("Category"),
-                    const SizedBox(height: 8),
-                    _buildCategoryDropdown(theme),
-                    const SizedBox(height: 32),
-                    _buildSaveButton(theme, isDark),
-                    const SizedBox(height: 16),
                   ],
-                ),
+                  _buildFormSection(theme),
+                  const SizedBox(height: 32),
+                  _buildSecurityTipsSection(theme),
+                  const SizedBox(height: 32),
+                  _buildSaveButton(theme),
+                  const SizedBox(height: 16),
+                ],
               ),
             ),
+    );
+  }
+
+  Widget _buildWelcomeHeader(AppTheme theme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Secure Your Account',
+          style: GoogleFonts.inter(
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+            color: theme.textColor,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Add your credentials to keep them safe and encrypted',
+          style: GoogleFonts.inter(
+            fontSize: 14,
+            color: theme.textColor.withOpacity(0.6),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFormSection(AppTheme theme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSectionLabel("Application"),
+        const SizedBox(height: 8),
+        _buildAppSelector(theme),
+        const SizedBox(height: 20),
+        _buildSectionLabel("Username"),
+        const SizedBox(height: 8),
+        _buildUsernameField(theme),
+        const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _buildSectionLabel("Password"),
+            _buildGenerateButton(theme),
+          ],
+        ),
+        const SizedBox(height: 8),
+        _buildPasswordField(theme),
+        const SizedBox(height: 20),
+        _buildSectionLabel("Category"),
+        const SizedBox(height: 8),
+        _buildCategoryDropdown(theme),
+      ],
+    );
+  }
+
+  Widget _buildSecurityTipsSection(AppTheme theme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Security Tips',
+          style: GoogleFonts.inter(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: theme.textColor,
+          ),
+        ),
+        const SizedBox(height: 12),
+        _buildSecurityTip(
+          icon: Icons.shield,
+          title: 'Strong Passwords',
+          description: 'Use a mix of letters, numbers & special characters',
+          color: Colors.blueAccent,
+          theme: theme,
+        ),
+        _buildSecurityTip(
+          icon: Icons.autorenew,
+          title: 'Regular Updates',
+          description: 'Change passwords every 3-6 months',
+          color: Colors.green,
+          theme: theme,
+        ),
+        _buildSecurityTip(
+          icon: Icons.phonelink_lock,
+          title: 'Unique Passwords',
+          description: 'Never reuse passwords across sites',
+          color: Colors.orange,
+          theme: theme,
+        ),
+      ],
     );
   }
 
   Widget _buildSectionLabel(String text) {
     final theme = Provider.of<ThemeNotifier>(context).currentTheme;
 
-    return Padding(
-      padding: const EdgeInsets.only(left: 4),
-      child: Text(
-        text,
-        style: GoogleFonts.inter(
-          fontSize: 13,
-          fontWeight: FontWeight.w500,
-          color: theme.textColor.withOpacity(0.7),
-          letterSpacing: 0.5,
-        ),
+    return Text(
+      text,
+      style: GoogleFonts.inter(
+        fontSize: 13,
+        fontWeight: FontWeight.w500,
+        color: theme.textColor.withOpacity(0.7),
+        letterSpacing: 0.5,
       ),
     );
   }
 
   Widget _buildAppSelector(AppTheme theme) {
     return Material(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(14),
       color: theme.cardColor,
       elevation: 0,
       child: InkWell(
@@ -306,14 +363,14 @@ class _NewPassState extends State<NewPass> {
             });
           }
         },
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(14),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(14),
             border: Border.all(
               color: _isSocialMediaSelected
-                  ? theme.accentColor.withOpacity(0.8)
+                  ? theme.accentColor.withOpacity(0.3)
                   : theme.cardColor.withOpacity(0.7),
               width: 1.5,
             ),
@@ -321,16 +378,16 @@ class _NewPassState extends State<NewPass> {
           child: Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(6),
+                padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: _isSocialMediaSelected
                       ? theme.accentColor.withOpacity(0.1)
                       : theme.cardColor.withOpacity(0.05),
-                  shape: BoxShape.circle,
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(
                   Icons.apps_rounded,
-                  size: 20,
+                  size: 22,
                   color: _isSocialMediaSelected
                       ? theme.accentColor
                       : theme.textColor.withOpacity(0.6),
@@ -339,9 +396,9 @@ class _NewPassState extends State<NewPass> {
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  _selectedSocialMedia ?? "Select app",
+                  _selectedSocialMedia ?? "Select application",
                   style: GoogleFonts.inter(
-                    fontSize: 15,
+                    fontSize: 16,
                     fontWeight: _isSocialMediaSelected
                         ? FontWeight.w500
                         : FontWeight.w400,
@@ -354,7 +411,7 @@ class _NewPassState extends State<NewPass> {
               Icon(
                 Icons.chevron_right_rounded,
                 color: theme.textColor.withOpacity(0.4),
-                size: 22,
+                size: 24,
               ),
             ],
           ),
@@ -365,32 +422,37 @@ class _NewPassState extends State<NewPass> {
 
   Widget _buildUsernameField(AppTheme theme) {
     return Material(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(14),
       color: theme.cardColor,
       elevation: 0,
       child: TextField(
         controller: _usernameController,
         style: GoogleFonts.inter(
           color: theme.textColor,
-          fontSize: 15,
+          fontSize: 16,
           fontWeight: FontWeight.w500,
         ),
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
-            vertical: 16,
+            vertical: 18,
           ),
-          border: InputBorder.none,
-          hintText: "Enter username",
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: BorderSide.none,
+          ),
+          filled: true,
+          fillColor: theme.cardColor,
+          hintText: "Enter username or email",
           hintStyle: GoogleFonts.inter(
             color: theme.textColor.withOpacity(0.5),
-            fontSize: 15,
+            fontSize: 16,
           ),
           prefixIcon: Padding(
-            padding: const EdgeInsets.only(left: 8, right: 12),
+            padding: const EdgeInsets.only(left: 12, right: 12),
             child: Icon(
               Icons.person_outline_rounded,
-              size: 22,
+              size: 24,
               color: theme.textColor.withOpacity(0.6),
             ),
           ),
@@ -412,19 +474,19 @@ class _NewPassState extends State<NewPass> {
         }
       },
       style: TextButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         minimumSize: Size.zero,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.autorenew_rounded, size: 16, color: theme.accentColor),
-          const SizedBox(width: 4),
+          Icon(Icons.autorenew_rounded, size: 18, color: theme.accentColor),
+          const SizedBox(width: 6),
           Text(
             'Generate',
             style: GoogleFonts.inter(
-              fontSize: 12.5,
+              fontSize: 13,
               fontWeight: FontWeight.w500,
               color: theme.accentColor,
             ),
@@ -436,7 +498,7 @@ class _NewPassState extends State<NewPass> {
 
   Widget _buildPasswordField(AppTheme theme) {
     return Material(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(14),
       color: theme.cardColor,
       elevation: 0,
       child: TextField(
@@ -444,25 +506,30 @@ class _NewPassState extends State<NewPass> {
         obscureText: !_passVisible,
         style: GoogleFonts.inter(
           color: theme.textColor,
-          fontSize: 15,
+          fontSize: 16,
           fontWeight: FontWeight.w500,
         ),
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
-            vertical: 16,
+            vertical: 18,
           ),
-          border: InputBorder.none,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: BorderSide.none,
+          ),
+          filled: true,
+          fillColor: theme.cardColor,
           hintText: "Enter password",
           hintStyle: GoogleFonts.inter(
             color: theme.textColor.withOpacity(0.5),
-            fontSize: 15,
+            fontSize: 16,
           ),
           prefixIcon: Padding(
-            padding: const EdgeInsets.only(left: 8, right: 12),
+            padding: const EdgeInsets.only(left: 12, right: 12),
             child: Icon(
               Icons.lock_outline_rounded,
-              size: 22,
+              size: 24,
               color: theme.textColor.withOpacity(0.6),
             ),
           ),
@@ -472,7 +539,7 @@ class _NewPassState extends State<NewPass> {
                   ? Icons.visibility_rounded
                   : Icons.visibility_off_rounded,
               color: theme.textColor.withOpacity(0.5),
-              size: 22,
+              size: 24,
             ),
             onPressed: () {
               HapticFeedback.selectionClick();
@@ -486,11 +553,13 @@ class _NewPassState extends State<NewPass> {
 
   Widget _buildCategoryDropdown(AppTheme theme) {
     return Material(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(14),
       color: theme.cardColor,
       elevation: 0,
       child: Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+        ),
         child: DropdownButtonFormField<String>(
           value: _selectedCategory,
           onChanged: (newValue) {
@@ -503,7 +572,7 @@ class _NewPassState extends State<NewPass> {
               child: Text(
                 category,
                 style: GoogleFonts.inter(
-                  fontSize: 15,
+                  fontSize: 16,
                   color: theme.textColor,
                   fontWeight: FontWeight.w500,
                 ),
@@ -513,19 +582,24 @@ class _NewPassState extends State<NewPass> {
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
-              vertical: 14,
+              vertical: 16,
             ),
-            border: InputBorder.none,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(14),
+              borderSide: BorderSide.none,
+            ),
+            filled: true,
+            fillColor: theme.cardColor,
             hintText: "Select category",
             hintStyle: GoogleFonts.inter(
-              fontSize: 15,
+              fontSize: 16,
               color: theme.textColor.withOpacity(0.5),
             ),
             prefixIcon: Padding(
-              padding: const EdgeInsets.only(left: 8, right: 12),
+              padding: const EdgeInsets.only(left: 12, right: 12),
               child: Icon(
                 Icons.category_rounded,
-                size: 22,
+                size: 24,
                 color: theme.textColor.withOpacity(0.6),
               ),
             ),
@@ -535,14 +609,68 @@ class _NewPassState extends State<NewPass> {
             Icons.arrow_drop_down_rounded,
             color: theme.textColor.withOpacity(0.5),
           ),
-          style: GoogleFonts.inter(fontSize: 15, color: theme.textColor),
-          borderRadius: BorderRadius.circular(12),
+          style: GoogleFonts.inter(fontSize: 16, color: theme.textColor),
+          borderRadius: BorderRadius.circular(14),
         ),
       ),
     );
   }
 
-  Widget _buildSaveButton(AppTheme theme, bool isDark) {
+  Widget _buildSecurityTip({
+    required IconData icon,
+    required String title,
+    required String description,
+    required Color color,
+    required AppTheme theme,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              icon,
+              color: color,
+              size: 22,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.inter(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: theme.textColor,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  description,
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    color: theme.textColor.withOpacity(0.6),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSaveButton(AppTheme theme) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
@@ -550,9 +678,9 @@ class _NewPassState extends State<NewPass> {
         style: ElevatedButton.styleFrom(
           backgroundColor: theme.accentColor,
           foregroundColor: theme.colorScheme.onPrimary,
-          padding: const EdgeInsets.symmetric(vertical: 14),
+          padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(14),
           ),
           elevation: 0,
           shadowColor: Colors.transparent,
@@ -561,17 +689,17 @@ class _NewPassState extends State<NewPass> {
         ),
         child: _isLoading
             ? const SizedBox(
-                width: 20,
-                height: 20,
+                width: 22,
+                height: 22,
                 child: CircularProgressIndicator(
-                  strokeWidth: 2,
+                  strokeWidth: 2.5,
                   color: Colors.white,
                 ),
               )
             : Text(
                 'Save Password',
                 style: GoogleFonts.inter(
-                  fontSize: 15,
+                  fontSize: 16,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0.2,
                 ),

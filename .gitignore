@@ -1,100 +1,78 @@
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
-.DS_Store
-.atom/
-.build/
-.buildlog/
-.history
-.svn/
-.swiftpm/
-migrate_working_dir/
-
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
-
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
-
-# Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
-.dart_tool/
-.flutter-plugins
-.flutter-plugins-dependencies
-.pub-cache/
-.pub/
-/build/
-
-# Symbolication related
-app.*.symbols
-
-# Obfuscation related
-app.*.map.json
-
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
-
-# ===============================================
-# Flutter & Dart Generated Files
-# ===============================================
-**/android/app/google-services.json  # Firebase config (if used)
-**/ios/firebase_app_id_file.json    # Firebase iOS config (if used)
-**/ios/Runner/GoogleService-Info.plist
-
-# Build directories
-**/build/
-**/android/app/build/
-**/ios/build/
-**/web/build/
-**/linux/build/
-**/windows/build/
-**/macos/build/
-
-# Flutter-generated files
+# =====================
+# Core Flutter/Dart
+# =====================
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
 .packages
 .pub-cache/
 .pub/
-pubspec.lock  # Remove if you want to allow version flexibility in open source
+/build/
+pubspec.lock
+flutter_export_environment.sh
 
-# Local development files
-*.lock
-*.log
-*.swp
-*.swo
+# Generated files
+**/doc/api/
+**/ios/Flutter/.last_build_id
+app.*.symbols
+app.*.map.json
 
-# ===============================================
-# Sensitive Signing Files (MUST BE IGNORED)
-# ===============================================
-# Android Signing
-android/key.properties  # Contains keystore passwords
-android/app/*.keystore
-android/app/*.jks
-android/app/debug.keystore
+# =====================
+# Android (Critical)
+# =====================
+# Keystore files (YOUR SPECIFIC REQUEST)
+**/android/key.properties
+**/android/app/keystore.properties
+**/android/app/*.jks
+**/android/app/*.keystore
+**/android/app/debug.keystore
 
-# iOS Signing (if applicable)
-ios/Runner.xcworkspace/xcuserdata/
-ios/Runner.xcodeproj/xcuserdata/
+# Gradle/build
+.gradle/
+**/android/app/build/
+**/android/build/
+**/android/.gradle/
+**/android/gradle-wrapper.jar
+**/android/local.properties
+**/android/**/GeneratedPluginRegistrant.java
+**/android/app/.cxx/
+**/android/.externalNativeBuild/
+**/android/captures/
 
-# ===============================================
-# IDE & OS Specific Files
-# ===============================================
-# Android Studio / IntelliJ
+# =====================
+# iOS
+# =====================
+**/ios/build/
+**/ios/**/*.mode1v3
+**/ios/**/*.mode2v3
+**/ios/**/*.moved-aside
+**/ios/**/*.pbxuser
+**/ios/**/*.perspectivev3
+**/ios/**/*sync/
+**/ios/**/.sconsign.dblite
+**/ios/**/.tags*
+**/ios/**/.vagrant/
+**/ios/**/DerivedData/
+**/ios/**/Icon?
+**/ios/**/Pods/
+**/ios/**/.symlinks/
+**/ios/Runner.xcworkspace/xcuserdata/
+**/ios/Runner.xcodeproj/xcuserdata/
+
+# =====================
+# IDEs
+# =====================
+# Android Studio/IntelliJ
 .idea/
 *.iml
+*.ipr
 *.iws
+**/.idea/workspace.xml
+**/.idea/tasks.xml
+**/.idea/gradle.xml
+**/.idea/dictionaries
+**/.idea/libraries
+**/.idea/modules.xml
 
 # VS Code
 .vscode/
@@ -102,40 +80,60 @@ ios/Runner.xcodeproj/xcuserdata/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+*.code-workspace
 
+# =====================
+# OS Junk
+# =====================
 # macOS
 .DS_Store
+._*
 
 # Windows
 Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
 
-# ===============================================
-# Environment & Configuration (Sensitive)
-# ===============================================
+# Linux
+.directory
+.trash-*
+
+# =====================
+# Environment/Sensitive
+# =====================
 .env
 .env.*
 *.env
 config.json
 secrets/
-
-# ===============================================
-# Firebase (if used)
-# ===============================================
-firebase_options.dart  # Generated file may contain keys
+firebase_options.dart
 **/google-services.json
 **/GoogleService-Info.plist
 
-# ===============================================
+# =====================
 # Miscellaneous
-# ===============================================
-# Coverage reports
-coverage/
+# =====================
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Temporary files
+# Temp files
+*.swp
+*.swo
+*~
+*.lock
+*.pyc
+*.class
 temp/
 tmp/
 
-# Personal notes/scratch files
-notes.md
-todo.txt
-scratch/
+# Coverage
+coverage/
+*.lcov
+
+# Version control
+.svn/
+.history/

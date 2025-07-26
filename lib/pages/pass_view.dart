@@ -172,83 +172,13 @@ class _PassViewState extends State<PassView> {
     }
   }
 
-  Widget _buildPasswordCriteria(String text, bool isValid, BuildContext context) {
-    final theme = Provider.of<ThemeNotifier>(context, listen: false).currentTheme;
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4.0),
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
-      decoration: BoxDecoration(
-        color: theme.cardColor.withOpacity(0.5),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        children: [
-          Icon(
-            isValid ? Icons.check_circle : Icons.error,
-            color: isValid ? theme.accentColor : theme.colorScheme.error,
-            size: 20,
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: 14,
-                color: theme.textColor.withOpacity(0.9),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStrengthBar(double strength, BuildContext context) {
-    final theme = Provider.of<ThemeNotifier>(context, listen: false).currentTheme;
-    final status = getStrengthStatus(strength);
-    final color = getStrengthColor(strength, context);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Strength: $status',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                color: theme.textColor,
-              ),
-            ),
-            Text(
-              '${(strength * 100).round()}%',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: color,
-                fontSize: 16,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        LinearProgressIndicator(
-          value: strength,
-          backgroundColor: theme.cardColor.withOpacity(0.3),
-          color: color,
-          minHeight: 8,
-          borderRadius: BorderRadius.circular(4),
-        ),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Provider.of<ThemeNotifier>(context).currentTheme;
     final assetImage = AssetLoader().getAssetPath(widget.socialMedia);
     final strength = calculatePasswordStrength(widget.password);
+    final status = getStrengthStatus(strength);
+    final color = getStrengthColor(strength, context);
 
     return Scaffold(
       backgroundColor: theme.backgroundColor,
@@ -287,285 +217,274 @@ class _PassViewState extends State<PassView> {
           ),
           IconButton(
             icon: _isDeleting
-                ? CircularProgressIndicator(color: theme.colorScheme.error)
+                ? SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: theme.colorScheme.error,
+                    ),
+                  )
                 : Icon(Icons.delete, color: theme.colorScheme.error),
             tooltip: 'Delete Password',
             onPressed: _isDeleting ? null : _deletePassword,
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Platform logo and title
-            Center(
-              child: Column(
-                children: [
-                  if (assetImage != null)
-                    Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: theme.cardColor,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      padding: const EdgeInsets.all(12),
-                      child: Image.asset(
-                        assetImage,
-                        errorBuilder: (_, __, ___) => Icon(
-                          Icons.lock,
-                          size: 40,
-                          color: theme.iconColor,
-                        ),
-                      ),
-                    ),
-                  const SizedBox(height: 12),
-                  Text(
-                    widget.socialMedia,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: theme.textColor,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Password information card
-            Card(
-              elevation: 0,
-              color: theme.cardColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      body: CustomScrollView(
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                // Header with logo and title
+                Column(
                   children: [
-                    Text(
-                      'Account Information',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: theme.accentColor,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    _buildInfoRow('Username:', widget.username, context),
-                    const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        Text(
-                          'Password: ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: theme.textColor,
-                          ),
+                    if (assetImage != null)
+                      Container(
+                        width: 72,
+                        height: 72,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: theme.cardColor,
                         ),
-                        Expanded(
-                          child: Text(
-                            _obscured ? '••••••••••••' : widget.password,
-                            style: TextStyle(
-                              fontFamily: 'monospace',
-                              color: theme.textColor,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(
-                            _obscured ? Icons.visibility : Icons.visibility_off,
-                            size: 20,
+                        padding: const EdgeInsets.all(16),
+                        child: Image.asset(
+                          assetImage,
+                          errorBuilder: (_, __, ___) => Icon(
+                            Icons.lock,
+                            size: 32,
                             color: theme.iconColor,
                           ),
-                          onPressed: () => setState(() => _obscured = !_obscured),
                         ),
-                        IconButton(
-                          icon: _isCopying
-                              ? SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: theme.iconColor,
-                                  ),
-                                )
-                              : Icon(Icons.copy, size: 20, color: theme.iconColor),
-                          onPressed: _isCopying ? null : _copyToClipboard,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    _buildInfoRow('Encryption:', widget.encryptionType, context),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Password strength section
-            Card(
-              elevation: 0,
-              color: theme.cardColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Password Health',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: theme.accentColor,
-                        fontSize: 16,
                       ),
-                    ),
                     const SizedBox(height: 16),
-                    _buildStrengthBar(strength, context),
-                    const SizedBox(height: 24),
                     Text(
-                      'Password Policies',
+                      widget.socialMedia,
                       style: TextStyle(
+                        fontSize: 22,
                         fontWeight: FontWeight.bold,
                         color: theme.textColor,
-                        fontSize: 16,
                       ),
                     ),
                     const SizedBox(height: 8),
-                    _buildPasswordCriteria(
-                      'At least 12 characters long (current: ${widget.password.length})',
-                      widget.password.length >= 12,
-                      context,
-                    ),
-                    _buildPasswordCriteria(
-                      'Contains uppercase and lowercase letters',
-                      widget.password.contains(RegExp(r'[A-Z]')) &&
-                          widget.password.contains(RegExp(r'[a-z]')),
-                      context,
-                    ),
-                    _buildPasswordCriteria(
-                      'Contains numbers (0-9)',
-                      widget.password.contains(RegExp(r'[0-9]')),
-                      context,
-                    ),
-                    _buildPasswordCriteria(
-                      'Contains special characters (!@#...)',
-                      widget.password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]')),
-                      context,
-                    ),
-                    _buildPasswordCriteria(
-                      'No repeated characters (e.g., "aaa")',
-                      !_hasRepeatedChars(widget.password),
-                      context,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Security tips
-            Card(
-              elevation: 0,
-              color: theme.cardColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
                     Text(
-                      'Security Tips',
+                      widget.username,
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: theme.accentColor,
                         fontSize: 16,
+                        color: theme.textColor.withOpacity(0.7),
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    _buildTipItem('🔒 Never share your password with anyone', context),
-                    _buildTipItem('🔄 Change your password every 3-6 months', context),
-                    _buildTipItem('🚫 Avoid password reuse across sites', context),
-                    _buildTipItem('🔑 Use a password manager for security', context),
                   ],
                 ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+                const SizedBox(height: 32),
 
-  Widget _buildInfoRow(String label, String value, BuildContext context) {
-    final theme = Provider.of<ThemeNotifier>(context, listen: false).currentTheme;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          width: 100,
-          child: Text(
-            label,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: theme.textColor,
-            ),
-          ),
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Text(
-            value,
-            style: TextStyle(
-              fontSize: 15,
-              color: theme.textColor,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+                // Password section
+                _SectionHeader(
+                  title: 'Password',
+                  action: Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          _obscured ? Icons.visibility : Icons.visibility_off,
+                          size: 20,
+                          color: theme.iconColor,
+                        ),
+                        onPressed: () => setState(() => _obscured = !_obscured),
+                      ),
+                      IconButton(
+                        icon: _isCopying
+                            ? SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: theme.iconColor,
+                                ),
+                              )
+                            : Icon(Icons.copy, size: 20, color: theme.iconColor),
+                        onPressed: _isCopying ? null : _copyToClipboard,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: theme.cardColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          _obscured ? '••••••••••••' : widget.password,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'monospace',
+                            color: theme.textColor,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
 
-  Widget _buildTipItem(String text, BuildContext context) {
-    final theme = Provider.of<ThemeNotifier>(context, listen: false).currentTheme;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(width: 4),
-          Expanded(
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: 14,
-                color: theme.textColor.withOpacity(0.9),
-              ),
+                // Password strength
+                _SectionHeader(title: 'Password Strength'),
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: theme.cardColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            status,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: color,
+                            ),
+                          ),
+                          Text(
+                            '${(strength * 100).round()}%',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: color,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      LinearProgressIndicator(
+                        value: strength,
+                        backgroundColor: theme.cardColor.withOpacity(0.3),
+                        color: color,
+                        minHeight: 8,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                // Security tips
+                _SectionHeader(title: 'Security Tips'),
+                const SizedBox(height: 8),
+                _SecurityTip(
+                  icon: Icons.lock,
+                  text: 'Never share your password with anyone',
+                  color: theme.accentColor,
+                ),
+                _SecurityTip(
+                  icon: Icons.update,
+                  text: 'Change your password every 3-6 months',
+                  color: Colors.blue,
+                ),
+                _SecurityTip(
+                  icon: Icons.block,
+                  text: 'Avoid password reuse across sites',
+                  color: Colors.orange,
+                ),
+                _SecurityTip(
+                  icon: Icons.security,
+                  text: 'Consider using a password manager',
+                  color: Colors.green,
+                ),
+              ]),
             ),
           ),
         ],
       ),
     );
   }
+}
 
-  bool _hasRepeatedChars(String password) {
-    return RegExp(r'(.)\1{2,}').hasMatch(password);
+class _SectionHeader extends StatelessWidget {
+  final String title;
+  final Widget? action;
+
+  const _SectionHeader({required this.title, this.action});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Provider.of<ThemeNotifier>(context).currentTheme;
+    
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: theme.textColor,
+          ),
+        ),
+        if (action != null) action!,
+      ],
+    );
+  }
+}
+
+class _SecurityTip extends StatelessWidget {
+  final IconData icon;
+  final String text;
+  final Color color;
+
+  const _SecurityTip({
+    required this.icon,
+    required this.text,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Provider.of<ThemeNotifier>(context).currentTheme;
+    
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.2),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              icon,
+              color: color,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Text(
+                text,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: theme.textColor.withOpacity(0.9),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -237,7 +237,7 @@ class _GeneratePasswordState extends State<GeneratePassword> {
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 60),
             ],
           ),
         ),

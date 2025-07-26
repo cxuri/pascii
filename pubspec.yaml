@@ -64,6 +64,8 @@ flutter:
     - assets/gitlab.png
     - assets/bitbucket.png
     - assets/quora.png
+    - assets/hackerone.png
+    - assets/bugcrowd.png
 
     # Tech/development tools
     - assets/figma.png

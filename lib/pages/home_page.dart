@@ -622,44 +622,104 @@ class UpdateBanner extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Container(
-      color: bannerColor,
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
+      decoration: BoxDecoration(
+        color: bannerColor,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'New Update: $releaseName',
-                  style: textTheme.bodyMedium?.copyWith(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Icon(Icons.update_rounded, 
                     color: colorScheme.onPrimaryContainer,
+                    size: 20,
                   ),
-                ),
-                Text(
-                  changelog,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: textTheme.bodySmall?.copyWith(
-                    color: colorScheme.onPrimaryContainer,
+                  const SizedBox(width: 8),
+                  Text(
+                    'New Version Available',
+                    style: textTheme.titleSmall?.copyWith(
+                      color: colorScheme.onPrimaryContainer,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
+                ],
+              ),
+              IconButton(
+                icon: Icon(Icons.close, 
+                  size: 18,
+                  color: colorScheme.onPrimaryContainer,
                 ),
-              ],
-            ),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                onPressed: onDismiss,
+              ),
+            ],
           ),
-          IconButton(
-            icon: Icon(Icons.close, color: colorScheme.onPrimaryContainer),
-            onPressed: onDismiss,
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.open_in_new,
+          const SizedBox(height: 8),
+          Text(
+            releaseName,
+            style: textTheme.bodyMedium?.copyWith(
               color: colorScheme.onPrimaryContainer,
+              fontWeight: FontWeight.w500,
             ),
-            onPressed: onViewRelease,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            _truncateChangelog(changelog),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: textTheme.bodySmall?.copyWith(
+              color: colorScheme.onPrimaryContainer.withOpacity(0.9),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: onViewRelease,
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  backgroundColor: colorScheme.onPrimaryContainer.withOpacity(0.1),
+                ),
+                child: Text(
+                  'View Release',
+                  style: textTheme.labelSmall?.copyWith(
+                    color: colorScheme.onPrimaryContainer,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
     );
+  }
+
+  String _truncateChangelog(String changelog) {
+    const maxLength = 120;
+    if (changelog.length <= maxLength) return changelog;
+    
+    final truncated = changelog.substring(0, maxLength);
+    final lastSpace = truncated.lastIndexOf(' ');
+    return lastSpace > 0 
+      ? '${truncated.substring(0, lastSpace)}...' 
+      : '$truncated...';
   }
 }
