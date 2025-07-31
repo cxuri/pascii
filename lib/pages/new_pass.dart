@@ -89,26 +89,37 @@ class _NewPassState extends State<NewPass> {
     final username = _usernameController.text.trim();
     final password = _passwordController.text.trim();
 
-    if (username.isEmpty || password.isEmpty || _selectedSocialMedia == null || _selectedCategory == null) {
+    if (username.isEmpty || 
+        password.isEmpty || 
+        _selectedSocialMedia == null || 
+        _selectedCategory == null) {
       await _showErrorDialog('Please fill out all fields and select both an app and category.');
       return;
     }
 
     try {
       setState(() => _isLoading = true);
-      final keys = await _storage.getEncryptionKeys();
-      final encryptionService = EncryptionService(keys['key']!, keys['iv']!);
-      final encryptedPassword = encryptionService.encryptData(password);
 
-      await _storage.savePassword(
-        username: username,
-        password: encryptedPassword,
-        type: _selectedSocialMedia!,
-        category: _selectedCategory!,
-      );
+      final passwordData = {
+        'username': username,
+        'password': password, 
+        'type': _selectedSocialMedia!,
+        'category': _selectedCategory!,
+      };
+
+      if (widget.id != null) {
+        await _storage.updatePassword(widget.id!, passwordData);
+      } else {
+        await _storage.savePassword(
+          username: username,
+          password: password,
+          type: _selectedSocialMedia!,
+          category: _selectedCategory!,
+        );
+      }
 
       await Fluttertoast.showToast(
-        msg: "Password saved",
+        msg: widget.id != null ? "Password updated" : "Password saved",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.black87,
@@ -119,13 +130,15 @@ class _NewPassState extends State<NewPass> {
       if (!mounted) return;
       Navigator.pop(context, true);
     } catch (e) {
-      await _showErrorDialog('Error saving password: ${e.toString()}');
+      await _showErrorDialog('Error ${widget.id != null ? 'updating' : 'saving'} password: ${e.toString()}');
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
       }
     }
   }
+
+   
 
   Future<void> _showErrorDialog(String message) async {
     final theme = Provider.of<ThemeNotifier>(context, listen: false).currentTheme;

@@ -99,19 +99,43 @@ class LocalStorage {
   Future<String> decryptPassword(String encryptedPassword) async {
     return _aes.decryptData(encryptedPassword);
   }
-
+  
   Future<void> updatePassword(String id, Map<String, dynamic> updates) async {
     try {
-      final existing = _passwordsBox.get(id);
-      if (existing != null) {
-        await _passwordsBox.put(id, {
-          ...Map<String, dynamic>.from(existing),
-          ...updates,
-          'updatedAt': DateTime.now().toIso8601String(),
-        });
+      // Validate input
+      if (id.isEmpty) {
+        throw ArgumentError('Password ID cannot be empty');
       }
+
+      // Get existing password data
+      final existing = _passwordsBox.get(id);
+      if (existing == null) {
+        throw Exception('Password with ID $id not found');
+      }
+
+      // Create a copy of updates to modify
+      final updatesCopy = Map<String, dynamic>.from(updates);
+
+      // Handle password encryption if password is being updated
+      if (updatesCopy.containsKey('password') && updatesCopy['password'] != null) {
+        final encryptedPassword = _aes.encryptData(updatesCopy['password']);
+        updatesCopy['password'] = encryptedPassword;
+      }
+
+      // Prepare the updated data
+      final updatedData = Map<String, dynamic>.from(existing);
+      updatedData.addAll(updatesCopy);
+      updatedData['updatedAt'] = DateTime.now().toIso8601String();
+
+      // Save the updated data
+      await _passwordsBox.put(id, updatedData);
+
+    } on ArgumentError catch (e) {
+      throw Exception('Validation error: ${e.message}');
+    } on HiveError catch (e) {
+      throw Exception('Database error: ${e.message}');
     } catch (e) {
-      throw Exception('Failed to update password: $e');
+      throw Exception('Failed to update password: ${e.toString()}');
     }
   }
 

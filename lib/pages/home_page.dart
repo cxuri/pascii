@@ -497,8 +497,9 @@ class _HomePageState extends State<HomePage> {
           !await _biometrics.authenticate()) {
         throw Exception('Authentication failed');
       }
-
+      debugPrint("Encrypted:"+password['password']);
       final decrypted = await _storage.decryptPassword(password['password'] as String);
+      debugPrint("Decrypted:"+decrypted);
 
       await Navigator.push(
         context,
